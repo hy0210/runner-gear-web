@@ -1,21 +1,20 @@
 # 進度
 
 ## 目前狀態
-- 里程碑：M4 部署與驗收（批次 5、6、7 待審）
-- 進行中的分支與 issue：`feat/fe-release` 的 #7 已完成並送審；#8 線上驗收要等 Amplify 上線
-- 下一步：前端 PR 依序合併到 `main` 後建立 Amplify，接著做 #8 線上驗收，並把前端網址補進兩份 README
+- 里程碑：M4 部署與驗收（批次 5、6、7 已合併）
+- 進行中的分支與 issue：無進行中的分支；#8 線上驗收要等 Amplify 上線
+- 下一步：建立 Amplify、設定 SPA rewrite，接著做 #8 線上驗收，並把前端網址補進兩份 README（同時把 `tests/deploy-config.test.js` 的線上網址檢查改成要求「前端網站」那一列有 `https://` 網址）
 - 等使用者處理：
-  1. 依序合併 PR #11 → #12 → 批次 7 的 PR（Create a merge commit，不要 squash）
-  2. 前端 Repo 的 `main` 保護規則（必要檢查：`lint-test-build`、`security-scan`）
-  3. 依部署步驟建立 Amplify、設定 SPA rewrite，提供前端網址
-  4. 在 EC2 的 `.env` 把前端網址加進 `CORS_ORIGINS`，執行 `docker compose up -d`
+  1. 前端 Repo 的 `main` 保護規則（必要檢查：`lint-test-build`、`security-scan`）
+  2. 依部署步驟建立 Amplify、設定 SPA rewrite，提供前端網址
+  3. 在 EC2 的 `.env` 把前端網址加進 `CORS_ORIGINS`，執行 `docker compose up -d`
 
 ## 批次總覽
 | 批次 | 分支 | 里程碑 | issue | 狀態 |
 |---|---|---|---|---|
-| 5 | `feat/fe-catalog` | M3 | #1 專案初始化、#2 版面、#3 首頁、#4 商品列表 | 待審（PR #11） |
-| 6 | `feat/fe-member-cart` | M3 | #5 註冊登入與 auth store、#6 購物車 | 待審（PR #12） |
-| 7 | `feat/fe-release` | M4 部署與驗收 | #7 部署設定與 README、#8 線上驗收 | #7 待審；#8 等 Amplify |
+| 5 | `feat/fe-catalog` | M3 | #1 專案初始化、#2 版面、#3 首頁、#4 商品列表 | ✅ 已合併（PR #11） |
+| 6 | `feat/fe-member-cart` | M3 | #5 註冊登入與 auth store、#6 購物車 | ✅ 已合併（PR #12） |
+| 7 | `feat/fe-release` | M4 部署與驗收 | #7 部署設定與 README、#8 線上驗收 | #7 ✅ 已合併（PR #13）；#8 等 Amplify |
 
 後端批次 1–4 已完成，見 `hy0210/runner-gear-api` 的 `docs/PROGRESS.md`。
 
