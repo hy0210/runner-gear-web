@@ -70,6 +70,17 @@ describe('#1 所有請求透過同一個 axios 實例', () => {
     expect(onUnauthorized).not.toHaveBeenCalled();
   });
 
+  test('標記 skipAuth 的請求（登入、註冊）：不帶舊 Token，401 也不觸發登出處理', async () => {
+    const onUnauthorized = vi.fn();
+    const { instance, sent } = createInstance({ status: 401, data: { status: 'failed', message: 'email 或密碼錯誤' } });
+    setupInterceptors(instance, { getToken: () => 'stale-token', onUnauthorized });
+
+    await expect(instance.post('/auth/login', {}, { skipAuth: true })).rejects.toBeDefined();
+
+    expect(sent[0].headers.Authorization).toBeUndefined();
+    expect(onUnauthorized).not.toHaveBeenCalled();
+  });
+
   test('其他錯誤（403、500）：不觸發登出處理', async () => {
     const onUnauthorized = vi.fn();
     const { instance } = createInstance({ status: 403 });
