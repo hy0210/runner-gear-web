@@ -6,7 +6,7 @@
 
 | 項目 | 網址 |
 |---|---|
-| 前端網站 | 待 Amplify 建立後補上 |
+| 前端網站 | <https://main.dw6kj6rkourn5.amplifyapp.com> |
 | 後端 API Base URL | <https://d1461t9n4hr1h9.cloudfront.net> |
 | API 文件（Swagger UI） | <https://d1461t9n4hr1h9.cloudfront.net/api-docs> |
 | 後端 Repo | [`hy0210/runner-gear-api`](https://github.com/hy0210/runner-gear-api) |

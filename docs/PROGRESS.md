@@ -2,12 +2,11 @@
 
 ## 目前狀態
 - 里程碑：M4 部署與驗收（批次 5、6、7 已合併）
-- 進行中的分支與 issue：無進行中的分支；#8 線上驗收要等 Amplify 上線
-- 下一步：建立 Amplify、設定 SPA rewrite，接著做 #8 線上驗收，並把前端網址補進兩份 README（同時把 `tests/deploy-config.test.js` 的線上網址檢查改成要求「前端網站」那一列有 `https://` 網址）
+- 進行中的分支與 issue：無進行中的分支；#8 線上驗收可以開始
+- 下一步：做 #8 線上驗收（手機與桌機寬度各跑一次完整流程）
 - 等使用者處理：
   1. 前端 Repo 的 `main` 保護規則（必要檢查：`lint-test-build`、`security-scan`）
-  2. 依部署步驟建立 Amplify、設定 SPA rewrite，提供前端網址
-  3. 在 EC2 的 `.env` 把前端網址加進 `CORS_ORIGINS`，執行 `docker compose up -d`
+  2. 確認 Amplify 已設定 SPA rewrite，且 EC2 的 `.env` 已把前端網址加進 `CORS_ORIGINS`（執行 `docker compose up -d`）
 
 ## 批次總覽
 | 批次 | 分支 | 里程碑 | issue | 狀態 |
@@ -19,7 +18,7 @@
 後端批次 1–4 已完成，見 `hy0210/runner-gear-api` 的 `docs/PROGRESS.md`。
 
 ## 線上環境
-- 前端 URL：之後補（Amplify）
+- 前端 URL：<https://main.dw6kj6rkourn5.amplifyapp.com>
 - API Base URL：https://d1461t9n4hr1h9.cloudfront.net
 - API 文件網址：https://d1461t9n4hr1h9.cloudfront.net/api-docs
 
