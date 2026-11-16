@@ -1,0 +1,108 @@
+/* 灰階主題：只用黑、白、灰。其餘沿用 Bootstrap。 */
+:root {
+  --bs-link-color: #27272a;
+  --bs-link-color-rgb: 39, 39, 42;
+  --bs-link-hover-color: #000;
+  --bs-link-hover-color-rgb: 0, 0, 0;
+  --bs-body-color: #27272a;
+  --bs-body-bg: #fafafa;
+  --rg-border: #d4d4d8;
+}
+
+body {
+  min-height: 100vh;
+}
+
+#app {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+}
+
+#app > main {
+  flex: 1;
+}
+
+.site-header,
+.site-footer {
+  background: #fff;
+  border-color: var(--rg-border) !important;
+}
+
+.hero {
+  background: #f4f4f5;
+  border-bottom: 1px solid var(--rg-border);
+}
+
+/* 商品卡：滑鼠移上去時浮起並加深邊框 */
+.product-card {
+  border-color: var(--rg-border);
+  transition: transform 0.15s ease, box-shadow 0.15s ease, border-color 0.15s ease;
+}
+
+.product-card:hover,
+.product-card:focus-within {
+  transform: translateY(-4px);
+  border-color: #27272a;
+  box-shadow: 0 0.5rem 1rem rgba(0, 0, 0, 0.12);
+}
+
+/* 圖片固定為正方形並自動裁切，任何尺寸的圖都不會撐破版面 */
+.product-card__image {
+  aspect-ratio: 1 / 1;
+  width: 100%;
+  object-fit: cover;
+  background: #e4e4e7;
+}
+
+.category-pills {
+  overflow-x: auto;
+  flex-wrap: nowrap;
+  -webkit-overflow-scrolling: touch;
+}
+
+.category-pills .btn {
+  white-space: nowrap;
+}
+
+/* 可點擊的元件至少 44px 高，手機上比較好按 */
+.btn,
+.form-control,
+.page-link,
+.nav-link {
+  min-height: 44px;
+  display: inline-flex;
+  align-items: center;
+}
+
+.btn {
+  justify-content: center;
+}
+
+.form-control {
+  display: block;
+}
+
+.page-link {
+  color: #27272a;
+  justify-content: center;
+  min-width: 44px;
+}
+
+.active > .page-link,
+.page-link.active {
+  background-color: #27272a;
+  border-color: #27272a;
+  color: #fff;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .product-card {
+    transition: none;
+  }
+
+  .product-card:hover,
+  .product-card:focus-within {
+    transform: none;
+  }
+}
