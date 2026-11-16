@@ -1,6 +1,7 @@
 // @vitest-environment node
 import { readFileSync } from 'node:fs';
 import { join } from 'node:path';
+import process from 'node:process';
 
 // 測試從專案根目錄執行
 // eslint-disable-next-line security/detect-non-literal-fs-filename -- 讀取專案內固定的設定檔
