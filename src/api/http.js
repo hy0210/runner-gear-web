@@ -4,6 +4,8 @@ import { resolveApiBaseUrl } from '../utils/env.js';
 // 全站唯一的 axios 實例。位址來自環境變數，不在程式中寫死。
 export const http = axios.create({
   baseURL: `${resolveApiBaseUrl(import.meta.env.VITE_API_BASE_URL)}/api/v1`,
+  // 只允許相對路徑：即使誤把完整網址傳進來，請求（與 Token）也不會送到其他網域
+  allowAbsoluteUrls: false,
   timeout: 15000,
   headers: { Accept: 'application/json' },
 });
@@ -13,12 +15,13 @@ export const http = axios.create({
 export function toApiError(error) {
   const status = error?.response?.status ?? 0;
   const body = error?.response?.data;
-  const message =
-    typeof body?.message === 'string' && body.message
-      ? body.message
-      : status === 0
-        ? '無法連線到伺服器，請檢查網路後再試一次'
-        : '發生錯誤，請稍後再試';
+  let message = '發生錯誤，請稍後再試';
+  if (status === 0) {
+    message = '無法連線到伺服器，請檢查網路後再試一次';
+  } else if (status < 500 && typeof body?.message === 'string' && body.message) {
+    // 只有 4xx 才顯示後端的訊息；5xx 一律用固定文字，避免顯示伺服器內部細節
+    message = body.message;
+  }
   const errors = Array.isArray(body?.errors) ? body.errors : [];
   return { status, message, errors };
 }

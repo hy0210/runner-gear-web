@@ -153,7 +153,8 @@ describe('#4 三種狀態都有明確回饋', () => {
     fetchProducts.mockResolvedValueOnce(result(2));
     const { wrapper } = await mountWithApp(ProductsView, { path: '/products' });
 
-    expect(wrapper.find('[data-test="state-error"]').text()).toContain('伺服器發生錯誤');
+    expect(wrapper.find('[data-test="state-error"]').text()).toContain('商品載入失敗');
+    expect(wrapper.find('[data-test="state-error"]').text()).not.toContain('伺服器發生錯誤');
 
     await wrapper.find('[data-test="state-action"]').trigger('click');
     await flushPromises();
