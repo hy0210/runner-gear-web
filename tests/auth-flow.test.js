@@ -56,7 +56,8 @@ describe('#5 會員可登入，狀態在重新整理後保留', () => {
     expect(login).toHaveBeenCalledWith({ email: 'runner@example.com', password: 'password123' });
     expect(useAuthStore(pinia).token).toBe('token-1');
     expect(useAuthStore(pinia).user.name).toBe('小跑');
-    expect(router.currentRoute.value.fullPath).toBe('/products?page=2');
+    // 商品列表頁是延遲載入的，等導向完成
+    await vi.waitFor(() => expect(router.currentRoute.value.fullPath).toBe('/products?page=2'));
   });
 
   test('redirect 指向外部網址：一律回首頁', async () => {
