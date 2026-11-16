@@ -19,6 +19,7 @@
      - Key：`VITE_API_BASE_URL`
      - Value：`https://d1461t9n4hr1h9.cloudfront.net`（結尾不加斜線，也不加 `/api/v1`）
    - Service role：保留預設（建立新的角色）。
+   - 不需要開啟 **Previews**（PR 預覽）。這個 Repo 是公開的，開啟後外部的 PR 也可能觸發建置。
 5. **Next** → **Save and deploy**。等 Provision → Build → Deploy 全部變綠。
 6. 記下 App 首頁顯示的網址，格式是 `https://main.xxxxxxxx.amplifyapp.com`。
 
@@ -63,6 +64,8 @@ nano .env      # CORS_ORIGINS 加上前端網址，多個以逗號分隔，不�
 docker compose up -d
 docker compose ps   # api 為 running (healthy)
 ```
+
+`CORS_ORIGINS` 只填 Amplify 的完整網址（https、不加結尾斜線），不要用 `*`；正式環境也不需要 `http://localhost:5173`。
 
 ## 五、上線後檢查
 
