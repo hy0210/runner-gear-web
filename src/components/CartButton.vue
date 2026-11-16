@@ -14,6 +14,7 @@ function openCart() {
 
 <template>
   <button
+    id="cart-button"
     class="btn btn-outline-dark position-relative cart-button"
     type="button"
     :aria-label="auth.isLoggedIn ? `購物車，共 ${cart.totalQuantity} 件` : '購物車'"
