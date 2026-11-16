@@ -1,11 +1,3 @@
-<script setup>
-import { formatPrice } from '../utils/format.js';
-
-defineProps({
-  product: { type: Object, required: true },
-});
-</script>
-
 <template>
   <article class="card product-card h-100">
     <!-- 圖片網址來自後端：只用屬性綁定，不拼接到 HTML 或 CSS；不送出來源頁網址 -->
@@ -18,3 +10,11 @@ defineProps({
     </div>
   </article>
 </template>
+
+<script setup>
+import { formatPrice } from '../utils/format.js';
+
+defineProps({
+  product: { type: Object, required: true },
+});
+</script>

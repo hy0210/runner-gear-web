@@ -1,3 +1,17 @@
+<template>
+  <AppNavbar>
+    <template #actions>
+      <CartButton />
+    </template>
+  </AppNavbar>
+  <main>
+    <RouterView />
+  </main>
+  <AppFooter />
+  <CartOffcanvas />
+  <ToastStack />
+</template>
+
 <script setup>
 import { watch } from 'vue';
 import AppNavbar from './components/AppNavbar.vue';
@@ -24,17 +38,3 @@ watch(
   { immediate: true },
 );
 </script>
-
-<template>
-  <AppNavbar>
-    <template #actions>
-      <CartButton />
-    </template>
-  </AppNavbar>
-  <main>
-    <RouterView />
-  </main>
-  <AppFooter />
-  <CartOffcanvas />
-  <ToastStack />
-</template>

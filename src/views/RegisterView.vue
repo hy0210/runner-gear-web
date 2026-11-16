@@ -1,27 +1,3 @@
-<script setup>
-import FormField from '../components/FormField.vue';
-import { useAuthForm } from '../composables/useAuthForm.js';
-import { useAuthStore } from '../stores/auth.js';
-import { validateEmail, validateName, validatePassword } from '../utils/validation.js';
-
-const auth = useAuthStore();
-
-const { form, errors, formError, isSubmitting, onSubmit } = useAuthForm({
-  fields: { name: '', email: '', password: '' },
-  validate: (values) => ({
-    name: validateName(values.name.trim()),
-    email: validateEmail(values.email.trim()),
-    password: validatePassword(values.password),
-  }),
-  submit: (values) =>
-    auth.register({
-      name: values.name.trim(),
-      email: values.email.trim().toLowerCase(),
-      password: values.password,
-    }),
-});
-</script>
-
 <template>
   <div class="container py-5">
     <section class="card mx-auto auth-card" aria-labelledby="register-title">
@@ -53,3 +29,27 @@ const { form, errors, formError, isSubmitting, onSubmit } = useAuthForm({
     </section>
   </div>
 </template>
+
+<script setup>
+import FormField from '../components/FormField.vue';
+import { useAuthForm } from '../composables/useAuthForm.js';
+import { useAuthStore } from '../stores/auth.js';
+import { validateEmail, validateName, validatePassword } from '../utils/validation.js';
+
+const auth = useAuthStore();
+
+const { form, errors, formError, isSubmitting, onSubmit } = useAuthForm({
+  fields: { name: '', email: '', password: '' },
+  validate: (values) => ({
+    name: validateName(values.name.trim()),
+    email: validateEmail(values.email.trim()),
+    password: validatePassword(values.password),
+  }),
+  submit: (values) =>
+    auth.register({
+      name: values.name.trim(),
+      email: values.email.trim().toLowerCase(),
+      password: values.password,
+    }),
+});
+</script>

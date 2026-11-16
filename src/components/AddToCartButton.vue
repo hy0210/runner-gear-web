@@ -1,3 +1,16 @@
+<template>
+  <button
+    class="btn btn-dark btn-sm w-100 mt-2"
+    type="button"
+    :disabled="isAdding"
+    :aria-label="`加入購物車：${product.name}`"
+    @click="addToCart"
+  >
+    <span v-if="isAdding" class="spinner-border spinner-border-sm me-2" aria-hidden="true"></span>
+    {{ isAdding ? '加入中…' : '加入購物車' }}
+  </button>
+</template>
+
 <script setup>
 import { ref } from 'vue';
 import { useCartStore } from '../stores/cart.js';
@@ -27,16 +40,3 @@ async function addToCart() {
   }
 }
 </script>
-
-<template>
-  <button
-    class="btn btn-dark btn-sm w-100 mt-2"
-    type="button"
-    :disabled="isAdding"
-    :aria-label="`加入購物車：${product.name}`"
-    @click="addToCart"
-  >
-    <span v-if="isAdding" class="spinner-border spinner-border-sm me-2" aria-hidden="true"></span>
-    {{ isAdding ? '加入中…' : '加入購物車' }}
-  </button>
-</template>

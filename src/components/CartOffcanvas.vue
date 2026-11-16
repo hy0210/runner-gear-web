@@ -1,44 +1,3 @@
-<script setup>
-import { nextTick, ref, watch } from 'vue';
-import { useCartStore, MAX_QUANTITY } from '../stores/cart.js';
-import { useToastStore } from '../stores/toast.js';
-import { toApiError } from '../api/http.js';
-import { formatPrice } from '../utils/format.js';
-
-const cart = useCartStore();
-const toast = useToastStore();
-const closeButton = ref(null);
-
-// 開啟時把焦點移到關閉按鈕；關閉後還給購物車按鈕，方便鍵盤操作
-watch(
-  () => cart.isOpen,
-  async (isOpen, wasOpen) => {
-    await nextTick();
-    if (isOpen) {
-      closeButton.value?.focus();
-    } else if (wasOpen) {
-      document.getElementById('cart-button')?.focus();
-    }
-  },
-);
-
-function isPending(item) {
-  return cart.pendingIds.includes(item.id);
-}
-
-// 操作失敗時只顯示提示；畫面上的資料只會由後端的回應更新，所以不會和後端不一致
-async function run(task) {
-  try {
-    await task();
-  } catch (error) {
-    toast.show(toApiError(error).message, 'error');
-  }
-}
-
-const changeQuantity = (item, quantity) => run(() => cart.update(item.id, quantity));
-const removeItem = (item) => run(() => cart.remove(item.id));
-</script>
-
 <template>
   <div>
     <aside
@@ -122,3 +81,44 @@ const removeItem = (item) => run(() => cart.remove(item.id));
     <div v-if="cart.isOpen" class="offcanvas-backdrop fade show" @click="cart.close()"></div>
   </div>
 </template>
+
+<script setup>
+import { nextTick, ref, watch } from 'vue';
+import { useCartStore, MAX_QUANTITY } from '../stores/cart.js';
+import { useToastStore } from '../stores/toast.js';
+import { toApiError } from '../api/http.js';
+import { formatPrice } from '../utils/format.js';
+
+const cart = useCartStore();
+const toast = useToastStore();
+const closeButton = ref(null);
+
+// 開啟時把焦點移到關閉按鈕；關閉後還給購物車按鈕，方便鍵盤操作
+watch(
+  () => cart.isOpen,
+  async (isOpen, wasOpen) => {
+    await nextTick();
+    if (isOpen) {
+      closeButton.value?.focus();
+    } else if (wasOpen) {
+      document.getElementById('cart-button')?.focus();
+    }
+  },
+);
+
+function isPending(item) {
+  return cart.pendingIds.includes(item.id);
+}
+
+// 操作失敗時只顯示提示；畫面上的資料只會由後端的回應更新，所以不會和後端不一致
+async function run(task) {
+  try {
+    await task();
+  } catch (error) {
+    toast.show(toApiError(error).message, 'error');
+  }
+}
+
+const changeQuantity = (item, quantity) => run(() => cart.update(item.id, quantity));
+const removeItem = (item) => run(() => cart.remove(item.id));
+</script>

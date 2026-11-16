@@ -1,33 +1,3 @@
-<script setup>
-import { onMounted, ref } from 'vue';
-import ProductCard from '../components/ProductCard.vue';
-import AddToCartButton from '../components/AddToCartButton.vue';
-import StateMessage from '../components/StateMessage.vue';
-import { fetchProducts } from '../api/products.js';
-import { toApiError } from '../api/http.js';
-
-const FEATURED_COUNT = 8;
-
-const products = ref([]);
-const isLoading = ref(true);
-const errorMessage = ref('');
-
-async function load() {
-  isLoading.value = true;
-  errorMessage.value = '';
-  try {
-    const result = await fetchProducts({ limit: FEATURED_COUNT });
-    products.value = result.products;
-  } catch (error) {
-    errorMessage.value = toApiError(error).message;
-  } finally {
-    isLoading.value = false;
-  }
-}
-
-onMounted(load);
-</script>
-
 <template>
   <section class="hero">
     <div class="container py-5">
@@ -68,3 +38,33 @@ onMounted(load);
     </div>
   </section>
 </template>
+
+<script setup>
+import { onMounted, ref } from 'vue';
+import ProductCard from '../components/ProductCard.vue';
+import AddToCartButton from '../components/AddToCartButton.vue';
+import StateMessage from '../components/StateMessage.vue';
+import { fetchProducts } from '../api/products.js';
+import { toApiError } from '../api/http.js';
+
+const FEATURED_COUNT = 8;
+
+const products = ref([]);
+const isLoading = ref(true);
+const errorMessage = ref('');
+
+async function load() {
+  isLoading.value = true;
+  errorMessage.value = '';
+  try {
+    const result = await fetchProducts({ limit: FEATURED_COUNT });
+    products.value = result.products;
+  } catch (error) {
+    errorMessage.value = toApiError(error).message;
+  } finally {
+    isLoading.value = false;
+  }
+}
+
+onMounted(load);
+</script>

@@ -41,3 +41,4 @@ agent 自行決定的事項與理由，一行一條。使用者回答過的決�
 | 11/16 | #7 | CSP 的 `img-src` 允許 `https:` | 商品圖片網址由後端資料決定，不固定在單一網域 |
 | 11/16 | #7 | SPA rewrite 用排除副檔名的規則轉到 `/index.html`（200） | 靜態檔案照常回傳，其餘路徑交給 Vue Router |
 | 11/16 | #7 | 部署操作步驟不放在 Repo，改由開發者自行保存；README 只說明部署方式與設定檔 | 使用者要求 |
+| 11/16 | #1 | `.vue` 檔改為 `<template>` 在前、`<script setup>` 在後，並以 ESLint `vue/block-order` 檢查 | 使用者的習慣 |
