@@ -1,8 +1,12 @@
 <script setup>
+import AppNavbar from './components/AppNavbar.vue';
+import AppFooter from './components/AppFooter.vue';
 </script>
 
 <template>
-  <main class="container py-5">
-    <h1>Runner Gear 跑者裝備</h1>
+  <AppNavbar />
+  <main>
+    <RouterView />
   </main>
+  <AppFooter />
 </template>
