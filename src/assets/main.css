@@ -106,3 +106,42 @@ body {
     transform: none;
   }
 }
+
+.auth-card {
+  max-width: 420px;
+  border-color: var(--rg-border);
+}
+
+.cart-button {
+  width: 44px;
+  padding: 0;
+}
+
+.cart-offcanvas {
+  width: min(420px, 100vw);
+}
+
+.cart-item__image {
+  width: 72px;
+  height: 72px;
+  flex: none;
+  object-fit: cover;
+  background: #e4e4e7;
+}
+
+.cart-item__quantity {
+  min-width: 44px;
+  justify-content: center;
+}
+
+.min-w-0 {
+  min-width: 0;
+}
+
+.toast-container {
+  z-index: 1090;
+}
+
+.toast {
+  background: #fff;
+}

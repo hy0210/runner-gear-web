@@ -29,3 +29,6 @@ setupInterceptors(http, {
 });
 
 app.mount('#app');
+
+// 重新整理後向後端確認 Token 仍有效；失效時由上面的 onUnauthorized 清除登入狀態
+auth.verifySession().catch(() => {});

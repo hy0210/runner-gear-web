@@ -70,6 +70,38 @@ describe('#1 所有請求透過同一個 axios 實例', () => {
     expect(onUnauthorized).not.toHaveBeenCalled();
   });
 
+  test('標記 skipAuth 的請求（登入、註冊）：不帶舊 Token，401 也不觸發登出處理', async () => {
+    const onUnauthorized = vi.fn();
+    const { instance, sent } = createInstance({ status: 401, data: { status: 'failed', message: 'email 或密碼錯誤' } });
+    setupInterceptors(instance, { getToken: () => 'stale-token', onUnauthorized });
+
+    await expect(instance.post('/auth/login', {}, { skipAuth: true })).rejects.toBeDefined();
+
+    expect(sent[0].headers.Authorization).toBeUndefined();
+    expect(onUnauthorized).not.toHaveBeenCalled();
+  });
+
+  test('舊 Token 的 401 晚到（已換成新的登入）：不清除新的登入狀態', async () => {
+    const onUnauthorized = vi.fn();
+    let current = 'old-token';
+    const instance = axios.create({
+      baseURL: 'http://api.test/api/v1',
+      adapter: async (config) => {
+        // 請求送出後、回應回來前，使用者重新登入
+        current = 'new-token';
+        const error = new Error('Request failed');
+        error.config = config;
+        error.response = { status: 401, data: {}, headers: {}, config };
+        throw error;
+      },
+    });
+    setupInterceptors(instance, { getToken: () => current, onUnauthorized });
+
+    await expect(instance.get('/cart')).rejects.toBeDefined();
+
+    expect(onUnauthorized).not.toHaveBeenCalled();
+  });
+
   test('其他錯誤（403、500）：不觸發登出處理', async () => {
     const onUnauthorized = vi.fn();
     const { instance } = createInstance({ status: 403 });
@@ -101,6 +133,18 @@ describe('#1 錯誤訊息整理', () => {
     const result = toApiError({ response: { status: 500, data: { message: 'QueryFailedError at /app/src/a.js:1' } } });
 
     expect(result.message).toBe('發生錯誤，請稍後再試');
+  });
+
+  test('伺服器錯誤（5xx）：不回傳後端的欄位錯誤', () => {
+    const result = toApiError({ response: { status: 500, data: { errors: [{ field: 'email', message: 'SQL error at /app' }] } } });
+
+    expect(result.errors).toEqual([]);
+  });
+
+  test('欄位錯誤的格式不正確：忽略該項', () => {
+    const result = toApiError({ response: { status: 400, data: { message: '輸入資料有誤', errors: [{ field: 'email', message: { x: 1 } }, null, { field: 'name', message: '請輸入姓名' }] } } });
+
+    expect(result.errors).toEqual([{ field: 'name', message: '請輸入姓名' }]);
   });
 
   test('後端沒有回傳訊息：使用預設訊息', () => {

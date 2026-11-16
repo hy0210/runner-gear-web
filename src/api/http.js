@@ -22,7 +22,11 @@ export function toApiError(error) {
     // 只有 4xx 才顯示後端的訊息；5xx 一律用固定文字，避免顯示伺服器內部細節
     message = body.message;
   }
-  const errors = Array.isArray(body?.errors) ? body.errors : [];
+  // 欄位錯誤同樣只採用 4xx，且只留下格式正確的項目
+  const errors =
+    status >= 400 && status < 500 && Array.isArray(body?.errors)
+      ? body.errors.filter((item) => typeof item?.field === 'string' && typeof item?.message === 'string')
+      : [];
   return { status, message, errors };
 }
 
@@ -31,6 +35,10 @@ export function toApiError(error) {
 //   onUnauthorized  帶著 Token 的請求得到 401 時呼叫（Token 過期或失效）
 export function setupInterceptors(instance, { getToken, onUnauthorized }) {
   instance.interceptors.request.use((config) => {
+    // 登入、註冊等請求標記 skipAuth：不帶 Token
+    if (config.skipAuth) {
+      return config;
+    }
     const token = getToken();
     if (token) {
       config.headers.Authorization = `Bearer ${token}`;
@@ -42,8 +50,11 @@ export function setupInterceptors(instance, { getToken, onUnauthorized }) {
     (response) => response,
     (error) => {
       // 只處理「帶著 Token 仍被拒絕」的情況；登入時帳密錯誤的 401 交給登入頁自己顯示
-      const sentToken = Boolean(error?.config?.headers?.Authorization);
-      if (error?.response?.status === 401 && sentToken) {
+      // 只在「用目前這個 Token 送出的請求」被拒絕時登出；
+      // 舊 Token 的請求較晚回來時，不應清掉之後的新登入
+      const sent = error?.config?.skipAuth ? null : error?.config?.headers?.Authorization;
+      const current = getToken();
+      if (error?.response?.status === 401 && sent && current && sent === `Bearer ${current}`) {
         onUnauthorized();
       }
       return Promise.reject(error);

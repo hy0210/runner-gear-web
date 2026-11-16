@@ -2,6 +2,7 @@
 import { computed, onMounted, ref, watch } from 'vue';
 import { useRoute, useRouter } from 'vue-router';
 import ProductCard from '../components/ProductCard.vue';
+import AddToCartButton from '../components/AddToCartButton.vue';
 import PaginationNav from '../components/PaginationNav.vue';
 import StateMessage from '../components/StateMessage.vue';
 import { fetchCategories, fetchProducts } from '../api/products.js';
@@ -158,7 +159,11 @@ onMounted(() => {
       </p>
       <div class="row row-cols-2 row-cols-md-3 row-cols-lg-4 g-3 g-md-4 mb-4">
         <div v-for="product in products" :key="product.id" class="col">
-          <ProductCard :product="product" />
+          <ProductCard :product="product">
+            <template #actions>
+              <AddToCartButton :product="product" />
+            </template>
+          </ProductCard>
         </div>
       </div>
       <PaginationNav

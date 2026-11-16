@@ -1,6 +1,7 @@
 <script setup>
 import { onMounted, ref } from 'vue';
 import ProductCard from '../components/ProductCard.vue';
+import AddToCartButton from '../components/AddToCartButton.vue';
 import StateMessage from '../components/StateMessage.vue';
 import { fetchProducts } from '../api/products.js';
 import { toApiError } from '../api/http.js';
@@ -58,7 +59,11 @@ onMounted(load);
     <StateMessage v-else-if="products.length === 0" kind="empty" title="目前沒有商品" />
     <div v-else class="row row-cols-2 row-cols-md-4 g-3 g-md-4">
       <div v-for="product in products" :key="product.id" class="col">
-        <ProductCard :product="product" />
+        <ProductCard :product="product">
+          <template #actions>
+            <AddToCartButton :product="product" />
+          </template>
+        </ProductCard>
       </div>
     </div>
   </section>
