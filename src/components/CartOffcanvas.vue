@@ -9,13 +9,15 @@ const cart = useCartStore();
 const toast = useToastStore();
 const closeButton = ref(null);
 
-// 開啟時把焦點移到關閉按鈕，方便鍵盤操作
+// 開啟時把焦點移到關閉按鈕；關閉後還給購物車按鈕，方便鍵盤操作
 watch(
   () => cart.isOpen,
-  async (isOpen) => {
+  async (isOpen, wasOpen) => {
+    await nextTick();
     if (isOpen) {
-      await nextTick();
       closeButton.value?.focus();
+    } else if (wasOpen) {
+      document.getElementById('cart-button')?.focus();
     }
   },
 );
