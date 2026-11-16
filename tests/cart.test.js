@@ -288,6 +288,20 @@ describe('#6 購物車與登入狀態同步', () => {
     expect(router.currentRoute.value.query.redirect).toBe('/products');
   });
 
+  test('關閉購物車後，焦點回到購物車按鈕', async () => {
+    const { wrapper, pinia } = await mountWithApp(App, { path: '/' });
+    login();
+    await flushPromises();
+
+    await wrapper.find('[data-test="cart-button"]').trigger('click');
+    await flushPromises();
+    expect(document.activeElement.getAttribute('data-test')).toBe('close');
+
+    useCartStore(pinia).close();
+    await flushPromises();
+    expect(document.activeElement.getAttribute('data-test')).toBe('cart-button');
+  });
+
   test('提示訊息顯示在畫面上，並可手動關閉', async () => {
     const { wrapper, pinia } = await mountWithApp(App, { path: '/' });
 
