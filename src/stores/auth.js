@@ -56,9 +56,13 @@ export const useAuthStore = defineStore('auth', {
     // 重新整理後向後端確認 Token 仍有效，並更新會員資料。
     // Token 已失效時，後端回 401，由 axios 攔截器清除登入狀態。
     async verifySession() {
-      if (!this.token) return;
+      const token = this.token;
+      if (!token) return;
       const user = await fetchMe();
-      this.setSession({ token: this.token, user });
+      // 等待回應期間若已登出或換了帳號，就不採用這次的結果
+      if (this.token === token) {
+        this.setSession({ token, user });
+      }
     },
   },
 });
