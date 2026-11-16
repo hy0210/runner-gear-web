@@ -1,9 +1,10 @@
+// @vitest-environment node
 import { readFileSync } from 'node:fs';
-import { fileURLToPath } from 'node:url';
+import { join } from 'node:path';
 
-const root = fileURLToPath(new URL('..', import.meta.url));
+// 測試從專案根目錄執行
 // eslint-disable-next-line security/detect-non-literal-fs-filename -- 讀取專案內固定的設定檔
-const read = (name) => readFileSync(`${root}${name}`, 'utf8');
+const read = (name) => readFileSync(join(process.cwd(), name), 'utf8');
 
 describe('#7 Amplify 的建置設定', () => {
   test('建置使用 Node 24、npm ci，產物在 dist', () => {
