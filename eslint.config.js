@@ -17,6 +17,8 @@ export default [
     rules: {
       // 後端資料一律以文字輸出，全站禁止 v-html
       'vue/no-v-html': 'error',
+      // .vue 檔的區塊順序：template 在前、script 在後
+      'vue/block-order': ['error', { order: ['template', 'script', 'style'] }],
       'vue/max-attributes-per-line': 'off',
       'vue/singleline-html-element-content-newline': 'off',
       'vue/html-self-closing': 'off',

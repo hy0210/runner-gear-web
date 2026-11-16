@@ -1,16 +1,3 @@
-<script setup>
-// 載入中、查無結果、發生錯誤時的共用提示區塊。
-defineProps({
-  // loading | empty | error
-  kind: { type: String, required: true },
-  title: { type: String, required: true },
-  description: { type: String, default: '' },
-  actionLabel: { type: String, default: '' },
-});
-
-defineEmits(['action']);
-</script>
-
 <template>
   <div
     class="text-center py-5"
@@ -33,3 +20,16 @@ defineEmits(['action']);
     </button>
   </div>
 </template>
+
+<script setup>
+// 載入中、查無結果、發生錯誤時的共用提示區塊。
+defineProps({
+  // loading | empty | error
+  kind: { type: String, required: true },
+  title: { type: String, required: true },
+  description: { type: String, default: '' },
+  actionLabel: { type: String, default: '' },
+});
+
+defineEmits(['action']);
+</script>

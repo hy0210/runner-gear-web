@@ -1,9 +1,3 @@
-<script setup>
-import { useToastStore } from '../stores/toast.js';
-
-const toast = useToastStore();
-</script>
-
 <template>
   <div class="toast-container position-fixed bottom-0 end-0 p-3" aria-live="polite" aria-atomic="false">
     <div
@@ -21,3 +15,9 @@ const toast = useToastStore();
     </div>
   </div>
 </template>
+
+<script setup>
+import { useToastStore } from '../stores/toast.js';
+
+const toast = useToastStore();
+</script>

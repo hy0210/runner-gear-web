@@ -1,17 +1,3 @@
-<script setup>
-import { useCartStore } from '../stores/cart.js';
-import { useAuthStore } from '../stores/auth.js';
-import { useRequireLogin } from '../composables/useRequireLogin.js';
-
-const cart = useCartStore();
-const auth = useAuthStore();
-const requireLogin = useRequireLogin();
-
-function openCart() {
-  if (requireLogin()) cart.open();
-}
-</script>
-
 <template>
   <button
     id="cart-button"
@@ -36,3 +22,17 @@ function openCart() {
     >{{ cart.totalQuantity }}</span>
   </button>
 </template>
+
+<script setup>
+import { useCartStore } from '../stores/cart.js';
+import { useAuthStore } from '../stores/auth.js';
+import { useRequireLogin } from '../composables/useRequireLogin.js';
+
+const cart = useCartStore();
+const auth = useAuthStore();
+const requireLogin = useRequireLogin();
+
+function openCart() {
+  if (requireLogin()) cart.open();
+}
+</script>

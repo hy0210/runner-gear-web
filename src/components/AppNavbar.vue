@@ -1,30 +1,3 @@
-<script setup>
-import { ref, watch } from 'vue';
-import { useRoute, useRouter } from 'vue-router';
-import { useAuthStore } from '../stores/auth.js';
-
-const auth = useAuthStore();
-const route = useRoute();
-const router = useRouter();
-
-// 手機版的選單是否展開
-const isOpen = ref(false);
-
-// 換頁後自動收合選單
-watch(
-  () => route.fullPath,
-  () => {
-    isOpen.value = false;
-  },
-);
-
-function logout() {
-  auth.clearSession();
-  isOpen.value = false;
-  router.push({ name: 'home' });
-}
-</script>
-
 <template>
   <header class="site-header border-bottom sticky-top">
     <nav class="navbar navbar-expand-md" aria-label="主要導覽">
@@ -68,3 +41,30 @@ function logout() {
     </nav>
   </header>
 </template>
+
+<script setup>
+import { ref, watch } from 'vue';
+import { useRoute, useRouter } from 'vue-router';
+import { useAuthStore } from '../stores/auth.js';
+
+const auth = useAuthStore();
+const route = useRoute();
+const router = useRouter();
+
+// 手機版的選單是否展開
+const isOpen = ref(false);
+
+// 換頁後自動收合選單
+watch(
+  () => route.fullPath,
+  () => {
+    isOpen.value = false;
+  },
+);
+
+function logout() {
+  auth.clearSession();
+  isOpen.value = false;
+  router.push({ name: 'home' });
+}
+</script>

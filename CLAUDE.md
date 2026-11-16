@@ -36,6 +36,7 @@
 - Node.js 24、Vite、Vue 3（Composition API、`<script setup>`）、Vue Router、Pinia、axios、Bootstrap 5；JavaScript。
 - 畫面依已確認的 wireframe，配色維持灰階（黑、白、灰），不另外設定主色。
 - 分層：`views`（頁面）→ `components`（可重用元件）→ `stores`（Pinia 狀態）→ `api`（呼叫後端，全部經過 `src/api/http.js` 的 axios 實例）。
+- `.vue` 檔的區塊順序為 `<template>` 在前、`<script setup>` 在後（ESLint 的 `vue/block-order` 會檢查）。
 - **不使用 `v-html`**（ESLint 會擋）；後端資料以文字插值或屬性綁定輸出，不拼接 HTML 或 CSS 字串。
 - 不寫任何假資料；畫面上的商品、分類、購物車一律來自 API。購物車金額直接顯示後端回傳的值。
 - 指令：`npm run lint`、`npm test`、`npm run build`（建置需要 `VITE_API_BASE_URL`）。

@@ -36,3 +36,9 @@ agent 自行決定的事項與理由，一行一條。使用者回答過的決�
 | 11/16 | #6 | 未登入點「加入購物車」或購物車按鈕：提示「請先登入」並導向登入頁，登入後回到原頁 | 需求要求未登入時要有引導 |
 | 11/16 | #6 | 提示訊息（Toast）固定在右下角，3.5 秒後自動消失，可手動關閉 | 加入購物車的操作回饋 |
 | 11/16 | #6 | 購物車不提供結帳按鈕，並註明「不提供結帳功能」 | 需求不含訂單與結帳 |
+| 11/16 | #7 | 建置設定寫在 Repo 的 `amplify.yml`（`nvm use 24`、`npm ci`），主控台只設定環境變數與 SPA rewrite | 建置流程跟著程式碼版本控管，Node 版本與本機一致 |
+| 11/16 | #7 | 安全標頭寫在 `customHttp.yml`：CSP（`script-src 'self'`、`connect-src` 只允許後端網域、`frame-ancestors 'none'`）、HSTS、nosniff、`X-Frame-Options: DENY`、Referrer-Policy | 計畫第 6 節；正式建置加上這組標頭在本機跑完整流程，沒有被擋 |
+| 11/16 | #7 | CSP 的 `img-src` 允許 `https:` | 商品圖片網址由後端資料決定，不固定在單一網域 |
+| 11/16 | #7 | SPA rewrite 用排除副檔名的規則轉到 `/index.html`（200） | 靜態檔案照常回傳，其餘路徑交給 Vue Router |
+| 11/16 | #7 | 部署操作步驟不放在 Repo，改由開發者自行保存；README 只說明部署方式與設定檔 | 使用者要求 |
+| 11/16 | #1 | `.vue` 檔改為 `<template>` 在前、`<script setup>` 在後，並以 ESLint `vue/block-order` 檢查 | 使用者的習慣 |

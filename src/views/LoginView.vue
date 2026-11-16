@@ -1,22 +1,3 @@
-<script setup>
-import FormField from '../components/FormField.vue';
-import { useAuthForm } from '../composables/useAuthForm.js';
-import { useAuthStore } from '../stores/auth.js';
-import { validateEmail, validatePassword } from '../utils/validation.js';
-
-const auth = useAuthStore();
-
-const { form, errors, formError, isSubmitting, onSubmit } = useAuthForm({
-  fields: { email: '', password: '' },
-  validate: (values) => ({
-    email: validateEmail(values.email.trim()),
-    // 登入時只檢查有沒有填，不檢查長度，避免透露密碼規則以外的資訊
-    password: validatePassword(values.password, { checkLength: false }),
-  }),
-  submit: (values) => auth.login({ email: values.email.trim().toLowerCase(), password: values.password }),
-});
-</script>
-
 <template>
   <div class="container py-5">
     <section class="card mx-auto auth-card" aria-labelledby="login-title">
@@ -38,3 +19,22 @@ const { form, errors, formError, isSubmitting, onSubmit } = useAuthForm({
     </section>
   </div>
 </template>
+
+<script setup>
+import FormField from '../components/FormField.vue';
+import { useAuthForm } from '../composables/useAuthForm.js';
+import { useAuthStore } from '../stores/auth.js';
+import { validateEmail, validatePassword } from '../utils/validation.js';
+
+const auth = useAuthStore();
+
+const { form, errors, formError, isSubmitting, onSubmit } = useAuthForm({
+  fields: { email: '', password: '' },
+  validate: (values) => ({
+    email: validateEmail(values.email.trim()),
+    // 登入時只檢查有沒有填，不檢查長度，避免透露密碼規則以外的資訊
+    password: validatePassword(values.password, { checkLength: false }),
+  }),
+  submit: (values) => auth.login({ email: values.email.trim().toLowerCase(), password: values.password }),
+});
+</script>

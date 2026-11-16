@@ -1,3 +1,85 @@
+<template>
+  <div class="container pt-4 pt-md-5">
+    <h1 class="h2 mb-4">全部商品</h1>
+
+    <div class="d-flex flex-column flex-lg-row gap-3 align-items-lg-center mb-3">
+      <nav class="category-pills d-flex gap-2 flex-lg-wrap flex-grow-1 pb-1" aria-label="商品分類">
+        <RouterLink
+          class="btn rounded-pill"
+          :class="filters.categoryId === null ? 'btn-dark' : 'btn-outline-dark'"
+          :to="linkFor({ categoryId: null, page: 1 })"
+          :aria-current="filters.categoryId === null ? 'true' : undefined"
+          data-test="category-filter"
+        >
+          全部
+        </RouterLink>
+        <RouterLink
+          v-for="category in categories"
+          :key="category.id"
+          class="btn rounded-pill"
+          :class="filters.categoryId === category.id ? 'btn-dark' : 'btn-outline-dark'"
+          :to="linkFor({ categoryId: category.id, page: 1 })"
+          :aria-current="filters.categoryId === category.id ? 'true' : undefined"
+          data-test="category-filter"
+        >
+          {{ category.name }}
+        </RouterLink>
+      </nav>
+
+      <form class="d-flex gap-2" role="search" data-test="search-form" @submit.prevent="submitSearch">
+        <label class="visually-hidden" for="keyword">搜尋商品名稱</label>
+        <input
+          id="keyword"
+          v-model="keywordInput"
+          class="form-control"
+          type="search"
+          placeholder="搜尋商品名稱"
+          :maxlength="KEYWORD_MAX_LENGTH"
+          data-test="keyword"
+        />
+        <button class="btn btn-dark flex-shrink-0" type="submit">搜尋</button>
+      </form>
+    </div>
+
+    <StateMessage v-if="isLoading" kind="loading" title="商品載入中…" />
+    <StateMessage
+      v-else-if="errorMessage"
+      kind="error"
+      title="商品載入失敗"
+      :description="errorMessage"
+      action-label="重試"
+      @action="loadProducts"
+    />
+    <StateMessage
+      v-else-if="products.length === 0"
+      kind="empty"
+      :title="hasFilters ? emptyTitle : '目前沒有商品'"
+      :description="hasFilters ? '試試其他關鍵字，或清除篩選條件。' : ''"
+      :action-label="hasFilters ? '清除條件' : ''"
+      @action="clearFilters"
+    />
+    <template v-else>
+      <p class="text-secondary" data-test="summary">
+        共 {{ pagination.total }} 件商品，第 {{ pagination.page }} / {{ pagination.totalPages }} 頁
+      </p>
+      <div class="row row-cols-2 row-cols-md-3 row-cols-lg-4 g-3 g-md-4 mb-4">
+        <div v-for="product in products" :key="product.id" class="col">
+          <ProductCard :product="product">
+            <template #actions>
+              <AddToCartButton :product="product" />
+            </template>
+          </ProductCard>
+        </div>
+      </div>
+      <PaginationNav
+        :page="pagination.page"
+        :total-pages="pagination.totalPages"
+        :link-for="(page) => linkFor({ page })"
+      />
+    </template>
+  </div>
+</template>
+
 <script setup>
 import { computed, onMounted, ref, watch } from 'vue';
 import { useRoute, useRouter } from 'vue-router';
@@ -92,85 +174,3 @@ onMounted(() => {
   loadProducts();
 });
 </script>
-
-<template>
-  <div class="container pt-4 pt-md-5">
-    <h1 class="h2 mb-4">全部商品</h1>
-
-    <div class="d-flex flex-column flex-lg-row gap-3 align-items-lg-center mb-3">
-      <nav class="category-pills d-flex gap-2 flex-lg-wrap flex-grow-1 pb-1" aria-label="商品分類">
-        <RouterLink
-          class="btn rounded-pill"
-          :class="filters.categoryId === null ? 'btn-dark' : 'btn-outline-dark'"
-          :to="linkFor({ categoryId: null, page: 1 })"
-          :aria-current="filters.categoryId === null ? 'true' : undefined"
-          data-test="category-filter"
-        >
-          全部
-        </RouterLink>
-        <RouterLink
-          v-for="category in categories"
-          :key="category.id"
-          class="btn rounded-pill"
-          :class="filters.categoryId === category.id ? 'btn-dark' : 'btn-outline-dark'"
-          :to="linkFor({ categoryId: category.id, page: 1 })"
-          :aria-current="filters.categoryId === category.id ? 'true' : undefined"
-          data-test="category-filter"
-        >
-          {{ category.name }}
-        </RouterLink>
-      </nav>
-
-      <form class="d-flex gap-2" role="search" data-test="search-form" @submit.prevent="submitSearch">
-        <label class="visually-hidden" for="keyword">搜尋商品名稱</label>
-        <input
-          id="keyword"
-          v-model="keywordInput"
-          class="form-control"
-          type="search"
-          placeholder="搜尋商品名稱"
-          :maxlength="KEYWORD_MAX_LENGTH"
-          data-test="keyword"
-        />
-        <button class="btn btn-dark flex-shrink-0" type="submit">搜尋</button>
-      </form>
-    </div>
-
-    <StateMessage v-if="isLoading" kind="loading" title="商品載入中…" />
-    <StateMessage
-      v-else-if="errorMessage"
-      kind="error"
-      title="商品載入失敗"
-      :description="errorMessage"
-      action-label="重試"
-      @action="loadProducts"
-    />
-    <StateMessage
-      v-else-if="products.length === 0"
-      kind="empty"
-      :title="hasFilters ? emptyTitle : '目前沒有商品'"
-      :description="hasFilters ? '試試其他關鍵字，或清除篩選條件。' : ''"
-      :action-label="hasFilters ? '清除條件' : ''"
-      @action="clearFilters"
-    />
-    <template v-else>
-      <p class="text-secondary" data-test="summary">
-        共 {{ pagination.total }} 件商品，第 {{ pagination.page }} / {{ pagination.totalPages }} 頁
-      </p>
-      <div class="row row-cols-2 row-cols-md-3 row-cols-lg-4 g-3 g-md-4 mb-4">
-        <div v-for="product in products" :key="product.id" class="col">
-          <ProductCard :product="product">
-            <template #actions>
-              <AddToCartButton :product="product" />
-            </template>
-          </ProductCard>
-        </div>
-      </div>
-      <PaginationNav
-        :page="pagination.page"
-        :total-pages="pagination.totalPages"
-        :link-for="(page) => linkFor({ page })"
-      />
-    </template>
-  </div>
-</template>

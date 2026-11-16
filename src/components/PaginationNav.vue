@@ -1,16 +1,3 @@
-<script setup>
-import { computed } from 'vue';
-
-const props = defineProps({
-  page: { type: Number, required: true },
-  totalPages: { type: Number, required: true },
-  // 傳入頁碼，回傳該頁的路由位置
-  linkFor: { type: Function, required: true },
-});
-
-const pages = computed(() => Array.from({ length: props.totalPages }, (_, index) => index + 1));
-</script>
-
 <template>
   <nav v-if="totalPages > 1" aria-label="分頁">
     <ul class="pagination justify-content-center flex-wrap gap-1 mb-0">
@@ -36,3 +23,16 @@ const pages = computed(() => Array.from({ length: props.totalPages }, (_, index)
     </ul>
   </nav>
 </template>
+
+<script setup>
+import { computed } from 'vue';
+
+const props = defineProps({
+  page: { type: Number, required: true },
+  totalPages: { type: Number, required: true },
+  // 傳入頁碼，回傳該頁的路由位置
+  linkFor: { type: Function, required: true },
+});
+
+const pages = computed(() => Array.from({ length: props.totalPages }, (_, index) => index + 1));
+</script>

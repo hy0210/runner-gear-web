@@ -56,3 +56,14 @@
 | 6 | 購物車關閉後焦點沒有回到按鈕（無障礙） | 可不改 | ✅ 已修 |
 
 已檢查且無問題：登入與註冊以 `skipAuth` 送出、失敗的 401 不會登出；所有導向都經過 vue-router，沒有 `window.location`；Token 不會送到其他網域、不出現在網址或記錄；登出或 Token 失效時清除 localStorage 與購物車；沒有 `v-html` 或 `innerHTML`，商品名稱、會員名稱、錯誤訊息與 Toast 都以文字輸出；密碼每次送出後清空、不寫入 store 或 localStorage；購物車金額與件數直接採用後端的值，數量限制與後端一致，處理中會停用按鈕。
+
+### 批次 7｜`feat/fe-release`（#7）｜2026/11/16
+審查方式：獨立審查（唯讀），範圍為分支相對 `feat/fe-member-cart` 的全部變更，並檢查正式建置的 `dist/index.html`、CSS 與 `src` 的圖片與 style 綁定是否會被 CSP 擋下。另以正式建置加上 `customHttp.yml` 的標頭在本機跑完整流程（未登入導向、登入、加入購物車、調整、重新整理、登出），Console 沒有 CSP 錯誤。
+結論：**沒有「必改」**；2 項「建議改」已修完。批次 5 第 4 項（缺少 CSP 與安全標頭）確認已完成。
+
+| 編號 | 發現 | 判定 | 處理 |
+|---|---|---|---|
+| 1 | 部署文件沒有提醒 `CORS_ORIGINS` 不可用 `*`、正式環境不需要 localhost | 建議改 | ✅ 已補在部署步驟 |
+| 2 | 部署文件沒有提到不需開啟 PR 預覽（公開 Repo 的外部 PR 可能觸發建置） | 建議改 | ✅ 已補在部署步驟 |
+
+已檢查且無問題：CSP 沒有 `unsafe-inline`／`unsafe-eval`，建置產物沒有 inline script 或 style；`connect-src` 只允許同來源與後端網域；Bootstrap CSS 的 `data:` 圖示由 `img-src` 允許；`object-src 'none'`、`base-uri 'self'`、`form-action 'self'`、`frame-ancestors 'none'` 都有設定；HSTS、nosniff、`X-Frame-Options: DENY`、Referrer-Policy 套用到所有回應；SPA rewrite 只把沒有副檔名的路徑交給 `index.html`，且只部署 `dist`；`amplify.yml` 以 `npm ci` 安裝、沒有寫死任何值；README 與部署文件沒有機密（測試帳號是專題要求公開的）。
