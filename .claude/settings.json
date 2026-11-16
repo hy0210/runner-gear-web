@@ -1,0 +1,21 @@
+{
+  "permissions": {
+    "deny": [
+      "Bash(gh pr merge:*)",
+      "Read(./.env)",
+      "Read(./.env.local)",
+      "Read(./.env.development)",
+      "Read(./.env.production)",
+      "Read(./.env.test)",
+      "Edit(./.env)",
+      "Edit(./.env.local)",
+      "Edit(./.env.development)",
+      "Edit(./.env.production)",
+      "Edit(./.env.test)"
+    ]
+  },
+  "attribution": {
+    "commit": "",
+    "pr": ""
+  }
+}

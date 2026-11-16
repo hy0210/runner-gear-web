@@ -1,0 +1,58 @@
+name: CI
+
+on:
+  push:
+  pull_request:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: ci-${{ github.event_name }}-${{ github.ref }}
+  # push 事件不取消：gitleaks 在 push 時只掃該次推送的 commit，被取消就會漏掃
+  cancel-in-progress: ${{ github.event_name == 'pull_request' }}
+
+jobs:
+  lint-test-build:
+    name: lint-test-build
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v6
+      - uses: actions/setup-node@v6
+        with:
+          node-version: 24
+          cache: npm
+      - run: npm ci
+      - run: npm run lint
+      - run: npm test
+      - name: 確認可以建置
+        run: npm run build
+        env:
+          # 只用來驗證建置流程，不是正式的 API 位址
+          VITE_API_BASE_URL: https://api.example.com
+      - name: 缺少 API 位址時建置必須失敗
+        run: |
+          if npm run build; then
+            echo "缺少 VITE_API_BASE_URL 時不應該建置成功"
+            exit 1
+          fi
+
+  security-scan:
+    name: security-scan
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      pull-requests: read
+    steps:
+      - uses: actions/checkout@v6
+        with:
+          fetch-depth: 0
+      - name: gitleaks（掃描機密：push 掃該次推送的 commit，PR 掃全部 commit）
+        uses: gitleaks/gitleaks-action@v2
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      - uses: actions/setup-node@v6
+        with:
+          node-version: 24
+      - name: npm audit（high 以上即失敗）
+        run: npm audit --audit-level=high
