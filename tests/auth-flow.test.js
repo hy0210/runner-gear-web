@@ -35,6 +35,9 @@ describe('#5 登入後的導向只接受站內路徑', () => {
     ['', '/'],
     ['//evil.example.com', '/'],
     ['/\\evil.example.com', '/'],
+    ['/\t/evil.example.com', '/'],
+    ['/\n/evil.example.com', '/'],
+    ['/products\\..\\x', '/'],
     ['https://evil.example.com', '/'],
     ['javascript:alert(1)', '/'],
     [['/products', '/x'], '/products'],
@@ -84,6 +87,41 @@ describe('#5 會員可登入，狀態在重新整理後保留', () => {
     expect(fetchMe).toHaveBeenCalledTimes(1);
     expect(auth.isLoggedIn).toBe(true);
     expect(auth.user.name).toBe('改過名的小跑');
+  });
+
+  test('確認期間使用者登出：不會把會員資料寫回', async () => {
+    let resolve;
+    fetchMe.mockReturnValue(new Promise((r) => { resolve = r; }));
+    useAuthStore(createPinia()).setSession({ token: 'token-1', user });
+    const pinia = createPinia();
+    setActivePinia(pinia);
+    const auth = useAuthStore(pinia);
+
+    const pending = auth.verifySession();
+    auth.clearSession();
+    resolve(user);
+    await pending;
+
+    expect(auth.user).toBeNull();
+    expect(localStorage.length).toBe(0);
+  });
+
+  test('確認期間改登入另一個帳號：不會把舊帳號的資料配給新 Token', async () => {
+    let resolve;
+    fetchMe.mockReturnValue(new Promise((r) => { resolve = r; }));
+    useAuthStore(createPinia()).setSession({ token: 'token-a', user });
+    const pinia = createPinia();
+    setActivePinia(pinia);
+    const auth = useAuthStore(pinia);
+    const other = { ...user, id: 2, name: '另一位' };
+
+    const pending = auth.verifySession();
+    auth.setSession({ token: 'token-b', user: other });
+    resolve(user);
+    await pending;
+
+    expect(auth.token).toBe('token-b');
+    expect(auth.user.name).toBe('另一位');
   });
 
   test('沒有登入時不需要確認 Token', async () => {
