@@ -31,6 +31,10 @@ export function toApiError(error) {
 //   onUnauthorized  帶著 Token 的請求得到 401 時呼叫（Token 過期或失效）
 export function setupInterceptors(instance, { getToken, onUnauthorized }) {
   instance.interceptors.request.use((config) => {
+    // 登入、註冊等請求標記 skipAuth：不帶 Token
+    if (config.skipAuth) {
+      return config;
+    }
     const token = getToken();
     if (token) {
       config.headers.Authorization = `Bearer ${token}`;
@@ -42,7 +46,7 @@ export function setupInterceptors(instance, { getToken, onUnauthorized }) {
     (response) => response,
     (error) => {
       // 只處理「帶著 Token 仍被拒絕」的情況；登入時帳密錯誤的 401 交給登入頁自己顯示
-      const sentToken = Boolean(error?.config?.headers?.Authorization);
+      const sentToken = !error?.config?.skipAuth && Boolean(error?.config?.headers?.Authorization);
       if (error?.response?.status === 401 && sentToken) {
         onUnauthorized();
       }

@@ -106,3 +106,8 @@ body {
     transform: none;
   }
 }
+
+.auth-card {
+  max-width: 420px;
+  border-color: var(--rg-border);
+}
