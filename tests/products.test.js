@@ -62,7 +62,7 @@ describe('#4 可依分類與關鍵字瀏覽並分頁', () => {
     expect(fetchProducts).toHaveBeenCalledWith({ page: 1, limit: 12 });
     expect(wrapper.findAll('.product-card')).toHaveLength(12);
     expect(wrapper.find('[data-test="summary"]').text()).toContain('35');
-    expect(wrapper.findAll('[data-test="category"]').map((n) => n.text())).toEqual(['全部', '跑鞋', '服飾']);
+    expect(wrapper.findAll('[data-test="category-filter"]').map((n) => n.text())).toEqual(['全部', '跑鞋', '服飾']);
     expect(wrapper.findAll('[data-test="page"]')).toHaveLength(3);
   });
 
@@ -70,12 +70,12 @@ describe('#4 可依分類與關鍵字瀏覽並分頁', () => {
     fetchProducts.mockResolvedValue(result(5));
     const { wrapper, router } = await mountWithApp(ProductsView, { path: '/products?page=2' });
 
-    await wrapper.findAll('[data-test="category"]')[2].trigger('click');
+    await wrapper.findAll('[data-test="category-filter"]')[2].trigger('click');
     await flushPromises();
 
     expect(router.currentRoute.value.query).toEqual({ categoryId: '2' });
     expect(fetchProducts).toHaveBeenLastCalledWith({ page: 1, limit: 12, categoryId: 2 });
-    expect(wrapper.findAll('[data-test="category"]')[2].attributes('aria-current')).toBe('true');
+    expect(wrapper.findAll('[data-test="category-filter"]')[2].attributes('aria-current')).toBe('true');
   });
 
   test('輸入關鍵字搜尋：重新查詢並回到第 1 頁，保留分類', async () => {
@@ -108,7 +108,7 @@ describe('#4 可依分類與關鍵字瀏覽並分頁', () => {
 
     expect(fetchProducts).toHaveBeenCalledWith({ page: 2, limit: 12, categoryId: 2, keyword: 'dry' });
     expect(wrapper.find('[data-test="keyword"]').element.value).toBe('dry');
-    expect(wrapper.findAll('[data-test="category"]')[2].attributes('aria-current')).toBe('true');
+    expect(wrapper.findAll('[data-test="category-filter"]')[2].attributes('aria-current')).toBe('true');
     expect(wrapper.find('[data-test="page"][aria-current="page"]').text()).toBe('2');
   });
 
