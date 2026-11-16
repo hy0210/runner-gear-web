@@ -26,6 +26,12 @@ describe('#1 所有請求透過同一個 axios 實例', () => {
     expect(http.defaults.baseURL).toBe('http://api.test/api/v1');
   });
 
+  test('只接受相對路徑：完整網址不會把請求送到其他網域', () => {
+    expect(http.defaults.allowAbsoluteUrls).toBe(false);
+    expect(http.getUri({ url: 'https://evil.example/steal' })).toMatch(/^http:\/\/api\.test\/api\/v1\//);
+    expect(http.getUri({ url: '//evil.example/steal' })).toMatch(/^http:\/\/api\.test\/api\/v1\//);
+  });
+
   test('已登入時發出請求：自動帶上 Authorization', async () => {
     const { instance, sent } = createInstance();
     setupInterceptors(instance, { getToken: () => 'token-123', onUnauthorized: vi.fn() });
@@ -89,6 +95,12 @@ describe('#1 錯誤訊息整理', () => {
 
     expect(result.status).toBe(0);
     expect(result.message).not.toMatch(/internal|Network Error/);
+  });
+
+  test('伺服器錯誤（5xx）：一律使用固定文字，不顯示後端的訊息', () => {
+    const result = toApiError({ response: { status: 500, data: { message: 'QueryFailedError at /app/src/a.js:1' } } });
+
+    expect(result.message).toBe('發生錯誤，請稍後再試');
   });
 
   test('後端沒有回傳訊息：使用預設訊息', () => {
