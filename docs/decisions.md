@@ -15,3 +15,6 @@ agent 自行決定的事項與理由，一行一條。使用者回答過的決�
 | 11/16 | #1 | Token 與會員資料存在 localStorage（鍵名 `runner-gear.session`） | 需求要求重新整理後維持登入；沒有 refresh token。代價是 XSS 時可被讀取，因此全站禁用 `v-html` |
 | 11/16 | #1 | 測試用 Vitest + Vue Test Utils + jsdom，API 以 mock 取代 | 計畫指定；前端測試不依賴後端服務 |
 | 11/16 | #1 | CI 工作名稱為 `lint-test-build` 與 `security-scan` | 設定 `main` 保護規則時勾選這兩個 |
+| 11/16 | #2 | 手機版選單的展開收合由 Vue 的狀態控制，不載入 Bootstrap 的 Collapse JS | 行為簡單，且容易測試 |
+| 11/16 | #3 | 首頁主視覺只放文字，不放圖片 | 沒有可用的自有圖片；避免再依賴外部圖片服務 |
+| 11/16 | #3 | 精選商品取商品列表的前 8 筆（`limit=8`） | 後端沒有「精選」欄位；需求只要求資料來自 API |
