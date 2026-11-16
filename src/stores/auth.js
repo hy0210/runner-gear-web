@@ -60,6 +60,7 @@ export const useAuthStore = defineStore('auth', {
       if (!token) return;
       const user = await fetchMe();
       // 等待回應期間若已登出或換了帳號，就不採用這次的結果
+      // eslint-disable-next-line security/detect-possible-timing-attacks -- 比對的是瀏覽器自己保存的兩個值，不是驗證密鑰
       if (this.token === token) {
         this.setSession({ token, user });
       }
