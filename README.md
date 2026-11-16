@@ -66,7 +66,7 @@ npm run dev             # http://localhost:5173
 
 ## 部署
 
-部署在 AWS Amplify Hosting，`main` 有新的合併時自動建置。主控台的設定步驟見 [`docs/deploy.md`](docs/deploy.md)。
+部署在 AWS Amplify Hosting，`main` 有新的合併時自動建置。建置設定在 `amplify.yml`，安全標頭在 `customHttp.yml`；主控台另外設定環境變數 `VITE_API_BASE_URL` 與 SPA rewrite（沒有副檔名的路徑以 200 轉到 `/index.html`）。
 
 ## 文件
 

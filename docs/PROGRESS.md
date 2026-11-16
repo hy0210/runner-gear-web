@@ -7,7 +7,7 @@
 - 等使用者處理：
   1. 依序合併 PR #11 → #12 → 批次 7 的 PR（Create a merge commit，不要 squash）
   2. 前端 Repo 的 `main` 保護規則（必要檢查：`lint-test-build`、`security-scan`）
-  3. 依 `docs/deploy.md` 建立 Amplify、設定 SPA rewrite，提供前端網址
+  3. 依部署步驟建立 Amplify、設定 SPA rewrite，提供前端網址
   4. 在 EC2 的 `.env` 把前端網址加進 `CORS_ORIGINS`，執行 `docker compose up -d`
 
 ## 批次總覽

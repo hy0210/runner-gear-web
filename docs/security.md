@@ -63,7 +63,7 @@
 
 | 編號 | 發現 | 判定 | 處理 |
 |---|---|---|---|
-| 1 | 部署文件沒有提醒 `CORS_ORIGINS` 不可用 `*`、正式環境不需要 localhost | 建議改 | ✅ 已補在 `docs/deploy.md` |
-| 2 | 部署文件沒有提到不需開啟 PR 預覽（公開 Repo 的外部 PR 可能觸發建置） | 建議改 | ✅ 已補在 `docs/deploy.md` |
+| 1 | 部署文件沒有提醒 `CORS_ORIGINS` 不可用 `*`、正式環境不需要 localhost | 建議改 | ✅ 已補在部署步驟 |
+| 2 | 部署文件沒有提到不需開啟 PR 預覽（公開 Repo 的外部 PR 可能觸發建置） | 建議改 | ✅ 已補在部署步驟 |
 
 已檢查且無問題：CSP 沒有 `unsafe-inline`／`unsafe-eval`，建置產物沒有 inline script 或 style；`connect-src` 只允許同來源與後端網域；Bootstrap CSS 的 `data:` 圖示由 `img-src` 允許；`object-src 'none'`、`base-uri 'self'`、`form-action 'self'`、`frame-ancestors 'none'` 都有設定；HSTS、nosniff、`X-Frame-Options: DENY`、Referrer-Policy 套用到所有回應；SPA rewrite 只把沒有副檔名的路徑交給 `index.html`，且只部署 `dist`；`amplify.yml` 以 `npm ci` 安裝、沒有寫死任何值；README 與部署文件沒有機密（測試帳號是專題要求公開的）。
